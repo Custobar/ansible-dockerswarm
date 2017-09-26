@@ -36,6 +36,8 @@ Setting `docker_swarm_interface` allows you to define which network interface wi
 
     docker_swarm_addr: "{{ hostvars[inventory_hostname]['ansible_' + docker_swarm_interface]['ipv4']['address'] }}"
 
+Docker manager IP address is resolved at runtime by default. Settings `docker_manager_address` allows to set specific address.
+
 By default, the ip address for raft API will be taken from desired interface.
 You can setup listening address where the raft APIs will be exposed, overriding
 the `docker_swarm_addr` variable value in your playbook.

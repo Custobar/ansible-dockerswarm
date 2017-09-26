@@ -54,12 +54,12 @@
 - name: Declare the address of the first Swarm manager as a fact.
   set_fact:
     docker_manager_address: "{{ docker_swarm_addr }}:{{ docker_swarm_port }}"
-  when: "inventory_hostname == groups['docker_swarm_manager'][0]"
+  when: "docker_manager_address is not defined and inventory_hostname == groups['docker_swarm_manager'][0]"
 
 - name: Distribute the fact containing address of the first Swarm manager.
   set_fact:
     docker_manager_address: "{{hostvars[groups['docker_swarm_manager'][0]]['docker_manager_address'] }}"
-  when: "inventory_hostname != groups['docker_swarm_manager'][0]"
+  when: "docker_manager_address is not defined and inventory_hostname != groups['docker_swarm_manager'][0]"
 
 - name: Join the pending Swarm worker nodes.
   shell: docker swarm join
