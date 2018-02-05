@@ -1,7 +1,7 @@
 ---
 
 # Docker repository branch
-docker_repo: main
+docker_repo: stable
 # docker_repo: testing
 # docker_repo: experimental
 
@@ -27,3 +27,5 @@ skip_engine: False # if true, skip the docker engine installation
 skip_group: False  # if true, does not add the docker_admin_users to the docker_group_name
 skip_swarm: False  # if true, skip the swarm setup
 skip_docker_py: False # if true, skip the docker-py
+
+docker_repo_cleanup: False

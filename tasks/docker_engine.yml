@@ -2,7 +2,7 @@
 
 - name: Import Docker APT public key.
   apt_key:
-    keyserver: "{{ docker_pubkey_server }}"
+    url: "{{ docker_pubkey_url }}"
     id: "{{ docker_pubkey_id }}"
     state: present
   when: ansible_os_family == 'Debian'
@@ -28,6 +28,13 @@
     gpgcheck: yes
   when: ansible_os_family == 'RedHat'
 
+- name: Remove old APT repos
+  apt_repository:
+    repo: "{{ docker_old_apt_repo }}"
+    state: absent
+    filename: 'docker'
+  when: ansible_os_family == 'Debian' and docker_repo_cleanup|bool
+
 - name: Add the APT Docker repository.
   apt_repository:
     repo: "{{ docker_apt_repo }}"
@@ -41,9 +48,15 @@
     state: present
   with_items: "{{ docker_dependencies }}"
 
-- name: Install the Docker Engine.
+- name: Remove the Docker Engine.
   package:
     name: docker-engine
+    state: absent
+  when: ansible_os_family == 'Debian' and docker_repo_cleanup|bool
+
+- name: Install the Docker Engine.
+  package:
+    name: "docker-{{ docker_release }}"
     state: present
 
 - name: Enable the Docker daemon as a service and start it.
